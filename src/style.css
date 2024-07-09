@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family:'Electronic';
+    src:url('./assets/fonts/FX-LED.ttf')
+}
+/* 数字渐变本质通过  北京渐变+字体镂空实现 */
+.text-gradient {
+    background-image: linear-gradient(to bottom,#e5e4ea,#5ea8f2);
+    /* 将上面设置的背景填充到文字下面，然后设置文字镂空，这时候就能显示特殊字体了 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent !important;
+}
