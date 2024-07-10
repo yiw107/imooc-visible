@@ -1,11 +1,11 @@
 <template>
-  <div ref="target" class="chart-container"></div>
+  <div ref="target" class="w-full h-full"></div>
 </template>
 
 <script setup>
 import * as echarts from 'echarts';
 import mapJson from '@/assets/MapData/china.json'
-import { onMounted, ref, watch, nextTick, onBeforeUnmount } from "vue";
+import { onMounted, ref, watch} from "vue";
 
 const props = defineProps({
   data: {
@@ -17,12 +17,20 @@ const props = defineProps({
 let myChart = null
 const target = ref(null)
 
+
+onMounted(() => {
+  echarts.registerMap('china', mapJson)
+  myChart = echarts.init(target.value)
+  renderChart()
+})
+
 const renderChart = () => {
   const options = {
     timeline: {
       data: props.data.voltageLevel,
       axisType: 'category',
       autoPlay: true,
+      // 根据数据刷新定
       playInterval: 3000,
       controlPosition: 'right',
       left: '10%',
@@ -201,34 +209,10 @@ const renderChart = () => {
   myChart.setOption(options)
 }
 
-onMounted(() => {
-  nextTick(() => {
-    echarts.registerMap('china', mapJson)
-    myChart = echarts.init(target.value)
-    renderChart()
-
-    window.addEventListener('resize', () => {
-      if (myChart) {
-        myChart.resize()
-      }
-    })
-  })
-})
-
-onBeforeUnmount(() => {
-  if (myChart) {
-    window.removeEventListener('resize', myChart.resize)
-    myChart.dispose()
-  }
-})
-
 watch(() => props.data, renderChart)
 
 </script>
 
-<style scoped>
-.chart-container {
-  width: 100%;
-  height:600px;
-}
+<style scoped lang="scss">
+
 </style>
